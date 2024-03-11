@@ -1,14 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { allowedLanguages, type AllowedLanguage } from "../config";
-
-function removeLangFromPath(path: string) {
-	const index = path.indexOf("/", 1);
-	if (index === -1) {
-		return "/";
-	}
-	return path.slice(index);
-}
+import { removeLangFromPath } from "../lib/routing";
 
 const currentPath = removeLangFromPath(Astro.url.pathname);
 
