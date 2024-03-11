@@ -1,0 +1,21 @@
+---
+import type { GetStaticPaths } from "astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { allowedLanguages } from "../../../config";
+
+export const getStaticPaths = (() => {
+	return allowedLanguages.map((lang) => ({ params: { lang } }));
+}) satisfies GetStaticPaths;
+
+const blogText = {
+	en: "This is the blog page",
+	es: "Esta es la página del blog",
+	fr: "C'est la page de blog",
+};
+
+const { lang } = Astro.params;
+---
+
+<BaseLayout lang={lang}>
+	<h2>{blogText[lang]}</h2>
+</BaseLayout>
