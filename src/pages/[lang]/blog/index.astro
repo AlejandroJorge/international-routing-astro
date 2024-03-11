@@ -1,9 +1,10 @@
 ---
 import type { GetStaticPaths } from "astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import DebugLink from "../../../components/DebugLink.astro";
 import { allowedLanguages } from "../../../config";
 import { getCollection } from "astro:content";
-import { removeLangFromSlug } from "../../../lib/routing";
+import { removeFirstPathPart } from "../../../lib/routing";
 
 export const getStaticPaths = (() => {
 	return allowedLanguages.map((lang) => ({ params: { lang } }));
@@ -17,6 +18,8 @@ const blogText = {
 
 const { lang } = Astro.params;
 
+const baseRoute = `/${lang}/blog`;
+
 const entries = await getCollection("blog", ({ data }) => data.lang === lang);
 ---
 
@@ -26,7 +29,9 @@ const entries = await getCollection("blog", ({ data }) => data.lang === lang);
 		{
 			entries.map((entry) => (
 				<li>
-					<a href={removeLangFromSlug(entry.slug)}>{entry.data.title}</a>
+					<DebugLink href={`${baseRoute}${removeFirstPathPart(entry.slug)}`}>
+						{entry.data.title}
+					</DebugLink>
 				</li>
 			))
 		}

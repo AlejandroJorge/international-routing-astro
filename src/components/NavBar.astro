@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 import type { AllowedLanguage } from "../config";
+import DebugLink from "./DebugLink.astro";
 
 const routes = [
 	{
@@ -37,12 +38,6 @@ const routes = [
 	},
 ];
 
-const linkToText = {
-	en: "Link to",
-	es: "Enlace a",
-	fr: "Lien vers",
-};
-
 interface Props {
 	lang: AllowedLanguage;
 }
@@ -55,12 +50,9 @@ const { lang } = Astro.props;
 			{
 				routes.map((route) => (
 					<li>
-						<p>
-							{linkToText[lang]}: {getRelativeLocaleUrl(lang, route.path)}
-						</p>
-						<a href={getRelativeLocaleUrl(lang, route.path)}>
+						<DebugLink href={getRelativeLocaleUrl(lang, route.path)}>
 							{route.text[lang]}
-						</a>
+						</DebugLink>
 					</li>
 				))
 			}

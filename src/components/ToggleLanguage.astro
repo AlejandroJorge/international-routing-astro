@@ -1,9 +1,10 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { allowedLanguages, type AllowedLanguage } from "../config";
-import { removeLangFromPath } from "../lib/routing";
+import { removeFirstPathPart } from "../lib/routing";
+import DebugLink from "./DebugLink.astro";
 
-const currentPath = removeLangFromPath(Astro.url.pathname);
+const currentPath = removeFirstPathPart(Astro.url.pathname);
 
 const currentPathText = {
 	en: "Current path without language",
@@ -22,7 +23,9 @@ const { lang } = Astro.props;
 	{
 		allowedLanguages.map((lang) => (
 			<li>
-				<a href={getRelativeLocaleUrl(lang, currentPath)}>{lang}</a>
+				<DebugLink href={getRelativeLocaleUrl(lang, currentPath)}>
+					{lang}
+				</DebugLink>
 			</li>
 		))
 	}

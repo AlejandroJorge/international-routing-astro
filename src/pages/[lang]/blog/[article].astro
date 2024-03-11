@@ -1,21 +1,30 @@
 ---
 import type { GetStaticPaths } from "astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import { allowedLanguages } from "../../../config";
+import { getCollection } from "astro:content";
+import { removeFirstPathPart } from "../../../lib/routing";
 
-export const getStaticPaths = (() => {
-	return allowedLanguages.map((lang) => ({ params: { lang } }));
+export const getStaticPaths = (async () => {
+	const blogEntries = await getCollection("blog");
+	return blogEntries.map((entry) => ({
+		params: {
+			lang: entry.data.lang,
+			article: removeFirstPathPart(entry.slug),
+		},
+		props: {
+			entry,
+		},
+	}));
 }) satisfies GetStaticPaths;
 
-const blogText = {
-	en: "This is the blog page",
-	es: "Esta es la página del blog",
-	fr: "C'est la page de blog",
-};
-
-const { lang } = Astro.params;
+const { entry } = Astro.props;
+const { Content } = await entry.render();
 ---
 
-<BaseLayout lang={lang}>
-	<h2>{blogText[lang]}</h2>
+<BaseLayout lang={entry.data.lang}>
+	<article>
+		<h1>{entry.data.title}</h1>
+		<p>{entry.data.date}</p>
+		<Content />
+	</article>
 </BaseLayout>
