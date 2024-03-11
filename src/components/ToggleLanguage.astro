@@ -1,0 +1,36 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { allowedLanguages, type AllowedLanguage } from "../config";
+
+function removeLangFromPath(path: string) {
+	const index = path.indexOf("/", 1);
+	if (index === -1) {
+		return "/";
+	}
+	return path.slice(index);
+}
+
+const currentPath = removeLangFromPath(Astro.url.pathname);
+
+const currentPathText = {
+	en: "Current path without language",
+	es: "Ruta actual sin idioma",
+	fr: "Chemin actuel sans langue",
+};
+
+interface Props {
+	lang: AllowedLanguage;
+}
+const { lang } = Astro.props;
+---
+
+<p>{currentPathText[lang]}: {currentPath}</p>
+<ul>
+	{
+		allowedLanguages.map((lang) => (
+			<li>
+				<a href={getRelativeLocaleUrl(lang, currentPath)}>{lang}</a>
+			</li>
+		))
+	}
+</ul>

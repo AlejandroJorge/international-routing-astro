@@ -1,0 +1,23 @@
+---
+import type { GetStaticPaths } from "astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { allowedLanguages } from "../../config";
+
+export const getStaticPaths = (() => {
+	return allowedLanguages.map((lang) => ({ params: { lang } }));
+}) satisfies GetStaticPaths;
+
+const missingPageText = {
+	en: "Page not found",
+	es: "Página no encontrada",
+	fr: "Page non trouvée",
+};
+
+const { lang } = Astro.params;
+
+// Remember this route has to be configured on hosting, with netlify you can have custom 404 handlers for each language, it's shown in netlify.toml
+---
+
+<BaseLayout lang={lang}>
+	<h2>{missingPageText[lang]}</h2>
+</BaseLayout>

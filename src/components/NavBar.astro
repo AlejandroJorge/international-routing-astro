@@ -1,0 +1,69 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import type { AllowedLanguage } from "../config";
+
+const routes = [
+	{
+		path: "/",
+		text: {
+			en: "Home",
+			es: "Inicio",
+			fr: "Accueil",
+		},
+	},
+	{
+		path: "/about",
+		text: {
+			en: "About",
+			es: "Acerca",
+			fr: "À propos",
+		},
+	},
+	{
+		path: "/contact",
+		text: {
+			en: "Contact",
+			es: "Contacto",
+			fr: "Contact",
+		},
+	},
+	{
+		path: "/blog",
+		text: {
+			en: "Blog",
+			es: "Blog",
+			fr: "Blog",
+		},
+	},
+];
+
+const linkToText = {
+	en: "Link to",
+	es: "Enlace a",
+	fr: "Lien vers",
+};
+
+interface Props {
+	lang: AllowedLanguage;
+}
+const { lang } = Astro.props;
+---
+
+<header>
+	<nav>
+		<ul>
+			{
+				routes.map((route) => (
+					<li>
+						<p>
+							{linkToText[lang]}: {getRelativeLocaleUrl(lang, route.path)}
+						</p>
+						<a href={getRelativeLocaleUrl(lang, route.path)}>
+							{route.text[lang]}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+</header>
